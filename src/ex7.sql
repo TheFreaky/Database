@@ -5,22 +5,19 @@ FROM producer AS p
               WHERE year = 2000) AS m
     ON p.best_movie_id = m.id;
 
-ALTER TABLE producer
-  DROP COLUMN movie_id CASCADE;
+ALTER TABLE producer DROP COLUMN movie_id CASCADE;
 ALTER TABLE movies
   ADD COLUMN prodecer_id INTEGER REFERENCES producer (id);
 
 SELECT p.*
 FROM producer AS p
-  INNER JOIN
-  (SELECT prodecer_id
-   FROM movies
-   GROUP BY prodecer_id
-   HAVING count(*) > 5) AS m
+  INNER JOIN (SELECT prodecer_id
+              FROM movies
+              GROUP BY prodecer_id
+              HAVING count(*) > 5) AS m
     ON p.id = m.prodecer_id;
 
-ALTER TABLE actors
-  DROP COLUMN movie_id CASCADE;
+ALTER TABLE actors DROP COLUMN movie_id CASCADE;
 CREATE TABLE actors_movies (
   id       SERIAL PRIMARY KEY,
   actor_id INTEGER REFERENCES actors (id),
@@ -32,8 +29,7 @@ FROM actors_movies
 GROUP BY movie_id
 HAVING count(*) > 10;
 
-ALTER TABLE movies
-  ADD COLUMN rating FLOAT;
+ALTER TABLE movies ADD COLUMN rating FLOAT;
 
 SELECT *
 FROM movies
@@ -51,7 +47,8 @@ FROM actors_movies AS am
               FROM movies
               WHERE genre_id = (SELECT id
                                 FROM genres
-                                WHERE name = 'Ужасы')) AS m
+                                WHERE name = 'Ужасы')
+             ) AS m
     ON movie_id = m.id;
 
 SELECT DISTINCT actors.*
@@ -83,9 +80,10 @@ FROM movies
 GROUP BY p;
 
 SELECT sum(budget)
-FROM movies AS m INNER JOIN (SELECT *
-                             FROM producer
-                             WHERE surname SIMILAR TO '%(v|n)') AS p
+FROM movies AS m
+  INNER JOIN (SELECT *
+              FROM producer
+              WHERE surname SIMILAR TO '%(v|n)') AS p
     ON m.prodecer_id = p.id;
 
 SELECT

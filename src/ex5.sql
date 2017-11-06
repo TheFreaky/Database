@@ -35,8 +35,7 @@ CREATE TABLE ex5.buildings (
   CONSTRAINT FK_buildings_walls_material FOREIGN KEY (walls_material) REFERENCES ex5.materials (name),
   CONSTRAINT FK_buildings_basement_material FOREIGN KEY (walls_material) REFERENCES ex5.materials (name)
 
-)
-  INHERITS (ex5.base);
+) INHERITS (ex5.base);
 
 CREATE TABLE ex5.halls (
   num              SMALLINT,
@@ -52,8 +51,7 @@ CREATE TABLE ex5.halls (
   building_kadastr VARCHAR(20),
   CONSTRAINT PK_halls_id PRIMARY KEY (num, building_kadastr),
   CONSTRAINT FK_halls_building_kadastr FOREIGN KEY (building_kadastr) REFERENCES ex5.buildings (address)
-)
-  INHERITS (ex5.base);
+) INHERITS (ex5.base);
 
 CREATE TABLE ex5.rooms (
   record           INTEGER,
@@ -66,5 +64,4 @@ CREATE TABLE ex5.rooms (
   building_kadastr VARCHAR(20),
   CONSTRAINT PK_rooms_id PRIMARY KEY (record, hall_num, building_kadastr),
   CONSTRAINT FK_rooms_hall_id FOREIGN KEY (hall_num, building_kadastr) REFERENCES ex5.halls (num, building_address)
-)
-  INHERITS (ex5.base);
+) INHERITS (ex5.base);

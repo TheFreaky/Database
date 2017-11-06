@@ -16,30 +16,23 @@ CREATE TABLE person (
 
 CREATE TABLE actors (
   number_of_movies INTEGER CHECK (number_of_movies > 5)
-)
-  INHERITS (person);
+) INHERITS (person);
 
 CREATE TABLE producer (
   motherland VARCHAR(50) DEFAULT 'USA'
-)
-  INHERITS (person);
+) INHERITS (person);
 
-ALTER TABLE movies
-  ADD movie_id SERIAL PRIMARY KEY;
-ALTER TABLE actors
-  ADD movie_id INTEGER REFERENCES filmography.public.movies (id);
+ALTER TABLE movies ADD movie_id SERIAL PRIMARY KEY;
+ALTER TABLE actors ADD movie_id INTEGER REFERENCES filmography.public.movies (id);
 ALTER TABLE producer
   ADD movie_id INTEGER REFERENCES filmography.public.movies (id),
   ADD best_movie_id INTEGER REFERENCES filmography.public.movies (id);
 
-ALTER TABLE movies
-  ALTER country SET DEFAULT 'UK';
+ALTER TABLE movies ALTER country SET DEFAULT 'UK';
 
-ALTER TABLE actors
-  DROP CONSTRAINT actors_number_of_movies_check;
+ALTER TABLE actors DROP CONSTRAINT actors_number_of_movies_check;
 
-ALTER TABLE movies
-  ADD CONSTRAINT ch_min_price CHECK (budget > 1000);
+ALTER TABLE movies ADD CONSTRAINT ch_min_price CHECK (budget > 1000);
 
 CREATE TABLE genres (
   id   SERIAL PRIMARY KEY,
@@ -47,15 +40,13 @@ CREATE TABLE genres (
 );
 
 ALTER TABLE movies
-  DROP genres;
-ALTER TABLE movies
+  DROP genres,
   ADD genre_id INTEGER REFERENCES genres (id);
 
 CREATE TYPE COUNTRY AS ENUM ('USA', 'UK', 'Russia', 'France', 'Germany');
 
 ALTER TABLE person
-  DROP motherland;
-ALTER TABLE person
+  DROP motherland,
   ADD motherland COUNTRY;
 
 ALTER TABLE person
@@ -63,5 +54,4 @@ ALTER TABLE person
 
 CREATE INDEX ON actors (name, surname);
 
-UPDATE movies
-SET name = concat(name, '(', year, ')');
+UPDATE movies SET name = concat(name, '(', year, ')');
